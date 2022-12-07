@@ -1,41 +1,75 @@
-// App.js
-import React, {Component} from 'react';
-import {View} from 'react-native';
-import {StyleSheet} from 'react-native';
-import ZegoUIKitPrebuiltCall, {
-  ONE_ON_ONE_VIDEO_CALL_CONFIG,
-} from '@zegocloud/zego-uikit-prebuilt-call-rn';
+// In App.js in a new project
 
-export default function VoiceCallPage(props) {
-  const userId = String(Math.floor(Math.random() * 100000));
+import React, {useState} from 'react';
+import {View, Text, TextInput, Button, TouchableOpacity} from 'react-native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
+//
+import CallingScreen from './CallingScreen';
+
+function HomeScreen() {
+  const [randomId, setRandomId] = useState('');
+
+  const navigation = useNavigation();
+
+  const generateRandomId = () => {
+    return `${Math.floor(Math.random() * 10000)}-${Math.floor(
+      Math.random() * 10000,
+    )}-${Math.floor(Math.random() * 10000)}`;
+  };
   return (
-    <View style={styles.container}>
-      <ZegoUIKitPrebuiltCall
-        appID={560831595}
-        appSign={
-          '546915037a2019c8ca4a1e7bc42dfe4d19c3df80b330a8b652a405dfd94d6d04'
-        }
-        userID={userId} // userID can be something like a phone number or the user id on your own user system.
-        userName={`user_${userId}`}
-        callID={'group123'} // callID can be any unique string.
-        config={{
-          // You can also use ONE_ON_ONE_VOICE_CALL_CONFIG/GROUP_VIDEO_CALL_CONFIG/GROUP_VOICE_CALL_CONFIG to make more types of calls.
-          ...ONE_ON_ONE_VIDEO_CALL_CONFIG,
-          onOnlySelfInRoom: () => {
-            // props.navigation.navigate('HomePage');
-          },
-          onHangUp: () => {
-            // props.navigation.navigate('HomePage');
-          },
-        }}
-      />
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <View style={{width: '90%'}}>
+        <TextInput
+          style={{borderWidth: 1, borderColor: 'black', marginBottom: 20}}
+          value={randomId}
+          onChangeText={text => setRandomId(text)}
+        />
+        <Button
+          title="join meeting"
+          onPress={() => {
+            //
+            if (randomId.length > 5) {
+              navigation.navigate('CallingScreen', {
+                callId: randomId,
+              });
+            } else {
+              //
+              alert('Enter Valid Id');
+            }
+          }}
+        />
+        <TouchableOpacity
+          style={{marginTop: 30, alignItems: 'center'}}
+          onPress={() => {
+            const id = generateRandomId();
+            setRandomId(id);
+          }}>
+          <Text style={{color: 'blue'}}>Generate Meeting Id</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+const Stack = createNativeStackNavigator();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen
+          name="CallingScreen"
+          component={CallingScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
