@@ -10,6 +10,7 @@ import CallingScreen from './CallingScreen';
 
 function HomeScreen() {
   const [randomId, setRandomId] = useState('');
+  const [userName, setUserName] = useState('');
 
   const navigation = useNavigation();
 
@@ -23,20 +24,32 @@ function HomeScreen() {
       <View style={{width: '90%'}}>
         <TextInput
           style={{borderWidth: 1, borderColor: 'black', marginBottom: 20}}
+          value={userName}
+          onChangeText={text => setUserName(text)}
+          placeholder={'Enter Your Name'}
+        />
+        <TextInput
+          style={{borderWidth: 1, borderColor: 'black', marginBottom: 20}}
           value={randomId}
           onChangeText={text => setRandomId(text)}
+          placeholder={'Enter Meeting Id'}
         />
         <Button
           title="join meeting"
           onPress={() => {
             //
-            if (randomId.length > 5) {
+            if (
+              randomId.length > 5 &&
+              userName.length > 5 &&
+              userName.indexOf(' ') == -1
+            ) {
               navigation.navigate('CallingScreen', {
                 callId: randomId,
+                useName: userName,
               });
             } else {
               //
-              alert('Enter Valid Id');
+              alert('Enter Valid Id Or Valid User Name');
             }
           }}
         />
