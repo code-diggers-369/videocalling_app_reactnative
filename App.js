@@ -7,6 +7,8 @@ import ZegoUIKitPrebuiltCall, {
 } from '@zegocloud/zego-uikit-prebuilt-call-rn';
 
 export default function VoiceCallPage(props) {
+  const userId = String(Math.floor(Math.random() * 100000));
+
   return (
     <View style={styles.container}>
       <ZegoUIKitPrebuiltCall
@@ -14,8 +16,8 @@ export default function VoiceCallPage(props) {
         appSign={
           '546915037a2019c8ca4a1e7bc42dfe4d19c3df80b330a8b652a405dfd94d6d04'
         }
-        userID={'121212'} // userID can be something like a phone number or the user id on your own user system.
-        userName={'user_12345'}
+        userID={userId} // userID can be something like a phone number or the user id on your own user system.
+        userName={`user_${userId}`}
         callID={'group123'} // callID can be any unique string.
         config={{
           // You can also use ONE_ON_ONE_VOICE_CALL_CONFIG/GROUP_VIDEO_CALL_CONFIG/GROUP_VOICE_CALL_CONFIG to make more types of calls.
